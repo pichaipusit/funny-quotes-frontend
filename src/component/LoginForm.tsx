@@ -21,7 +21,7 @@ export default function LoginForm({
       const res = await axios.post(url, { username, password });
 
       setToken(res.data.access_token);
-    } catch (e) {
+    } catch {
       setError("Authentication failed");
     }
   };
