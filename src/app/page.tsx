@@ -17,11 +17,11 @@ interface Quote {
   votes: number;
   user: User;
 }
-
+type Sort = "asc" | "desc";
 export default function Home() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<"asc" | "desc">("desc");
+  const [sort, setSort] = useState<Sort>("desc");
   const [token, setToken] = useState<string>("");
   const [quoteText, setQuoteText] = useState("");
   const [editingQuoteId, setEditingQuoteId] = useState<number | null>(null);
@@ -135,7 +135,7 @@ export default function Home() {
             />
             <select
               value={sort}
-              onChange={(e) => setSort(e.target.value as any)}
+              onChange={(e) => setSort(e.target.value as Sort)}
               className="border px-3 py-2 rounded-md"
             >
               <option value="desc">Most Voted</option>
