@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { jwtDecode } from "jwt-decode";
 import { getCurrentUserId } from "@/lib/utils";
 import LoginForm from "@/component/LoginForm";
 
@@ -125,6 +124,11 @@ export default function Home() {
     ],
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleCreateQuote();
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Funny Quotes</h1>
@@ -163,13 +167,16 @@ export default function Home() {
           </div>
 
           <div className="mb-6 flex gap-2">
-            <input
-              type="text"
-              placeholder="Enter a quote..."
-              value={quoteText}
-              onChange={(e) => setQuoteText(e.target.value)}
-              className="flex-1 border px-3 py-2 rounded-md"
-            />
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Enter a quote..."
+                value={quoteText}
+                onChange={(e) => setQuoteText(e.target.value)}
+                className="flex-1 border px-3 py-2 rounded-md"
+              />
+            </form>
+
             <button
               onClick={handleCreateQuote}
               className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
@@ -179,65 +186,68 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {quotes.map((quote) => (
-              <div key={quote.id} className="border rounded-md p-4 shadow">
-                {editingQuoteId === quote.id ? (
-                  <>
-                    <textarea
-                      value={editingText}
-                      onChange={(e) => setEditingText(e.target.value)}
-                      className="w-full border p-2 rounded-md mb-2"
-                    />
-                    <button
-                      onClick={handleUpdate}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditingQuoteId(null)}
-                      className="bg-gray-400 text-white px-3 py-1 rounded"
-                    >
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-lg">{quote.text}</p>
-                    <p className="text-sm text-gray-600">
-                      by {quote.user.username}
-                    </p>
-                    <p className="font-semibold">Votes: {quote.votes}</p>
-                    <button
-                      onClick={() => handleVote(quote.id)}
-                      className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded"
-                    >
-                      Vote
-                    </button>
-                    {quote.votes === 0 && (
-                      <>
-                        {quote.user.id === currentUserId &&
-                          quote.votes === 0 && (
-                            <button
-                              onClick={() => handleEdit(quote)}
-                              className="ml-2 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded"
-                            >
-                              Edit
-                            </button>
-                          )}
+            {quotes.length < 1 && <p>There's no quote</p>}
 
-                        <button
-                          onClick={() => handleDelete(quote.id)}
-                          className="ml-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
+            {quotes.length > 0 &&
+              quotes.map((quote) => (
+                <div key={quote.id} className="border rounded-md p-4 shadow">
+                  {editingQuoteId === quote.id ? (
+                    <>
+                      <textarea
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        className="w-full border p-2 rounded-md mb-2"
+                      />
+                      <button
+                        onClick={handleUpdate}
+                        className="bg-yellow-500 text-white px-3 py-1 rounded mr-2"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingQuoteId(null)}
+                        className="bg-gray-400 text-white px-3 py-1 rounded"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg">{quote.text}</p>
+                      <p className="text-sm text-gray-600">
+                        by {quote.user.username}
+                      </p>
+                      <p className="font-semibold">Votes: {quote.votes}</p>
+                      <button
+                        onClick={() => handleVote(quote.id)}
+                        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded"
+                      >
+                        Vote
+                      </button>
+                      {quote.votes === 0 && (
+                        <>
+                          {quote.user.id === currentUserId &&
+                            quote.votes === 0 && (
+                              <button
+                                onClick={() => handleEdit(quote)}
+                                className="ml-2 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded"
+                              >
+                                Edit
+                              </button>
+                            )}
+
+                          <button
+                            onClick={() => handleDelete(quote.id)}
+                            className="ml-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
           </div>
         </>
       )}

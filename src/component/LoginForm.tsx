@@ -26,40 +26,47 @@ export default function LoginForm({
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleAuth();
+  };
+
   return (
     <div className="max-w-sm mx-auto border p-6 rounded-md shadow">
       <h2 className="text-xl font-bold mb-4">
         {registerMode ? "Register" : "Login"}
       </h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        className="w-full mb-3 border px-3 py-2 rounded-md"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full mb-3 border px-3 py-2 rounded-md"
-      />
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-      <button
-        onClick={handleAuth}
-        className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mb-2"
-      >
-        {registerMode ? "Register" : "Login"}
-      </button>
-      <button
-        onClick={() => setRegisterMode(!registerMode)}
-        className="w-full text-sm text-blue-600 hover:underline"
-      >
-        {registerMode
-          ? "Already have an account? Login"
-          : "Don't have an account? Register"}
-      </button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full mb-3 border px-3 py-2 rounded-md"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full mb-3 border px-3 py-2 rounded-md"
+        />
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        <button
+          onClick={handleAuth}
+          className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded mb-2"
+        >
+          {registerMode ? "Register" : "Login"}
+        </button>
+        <button
+          onClick={() => setRegisterMode(!registerMode)}
+          className="w-full text-sm text-blue-600 hover:underline"
+        >
+          {registerMode
+            ? "Already have an account? Login"
+            : "Don't have an account? Register"}
+        </button>
+      </form>
     </div>
   );
 }
