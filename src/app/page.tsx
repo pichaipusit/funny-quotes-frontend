@@ -107,23 +107,6 @@ export default function Home() {
     fetchQuotes();
   };
 
-  const chartData = {
-    labels: quotes.map((q) => q.text),
-    datasets: [
-      {
-        data: quotes.map((q) => q.votes),
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#8BC34A",
-          "#E91E63",
-          "#9C27B0",
-        ],
-      },
-    ],
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleCreateQuote();
